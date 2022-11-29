@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  database:
+    image: bitnami/postgresql
+    ports:
+      - '5431:5432'
+    container_name: back0017
+    restart: always
+    volumes:
+    - back0017-disk:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: oO5INgERptI0qiLHrIcg
+      POSTGRES_DB: back0017
+volumes:
+  back0017-disk:
