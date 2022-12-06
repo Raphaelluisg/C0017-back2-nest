@@ -2,14 +2,15 @@ import { UserDto } from './dto/userInput.dto';
 import { IUserEntity } from '../entities/user.entity';
 import { randomUUID } from 'node:crypto';
 import { PartialUserDto } from './dto/partialUserInput.dto';
+import { UserRepository } from '../user.repository';
 
 export class UserService {
-  private users: IUserEntity[] = [];
+  constructor(private readonly userRepository: UserRepository) {}
 
   async createUser(user: UserDto): Promise<IUserEntity> {
     const userEntity = { ...user, id: randomUUID() };
-    this.users.push(userEntity);
-    return userEntity;
+    const createdUser = await this.userRepository.createUser(userEntity);
+    return createdUser;
   }
 
   async updateUser(userData: PartialUserDto): Promise<IUserEntity> {
