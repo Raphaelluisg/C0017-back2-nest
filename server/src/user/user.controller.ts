@@ -58,15 +58,11 @@ export class UserController {
 
   @Delete(':id')
   async deleteUserById(@Param('id') id: string): Promise<string> {
-    try {
-      const userIsDeleted = await this.service.deleteUserById(id);
-      if (userIsDeleted) {
-        return 'User deleted successfully!';
-      } else {
-        return 'User not found!';
-      }
-    } catch (err) {
-      console.log(err);
+    const userIsDeleted = await this.service.deleteUserById(id);
+    if (userIsDeleted) {
+      return 'User deleted successfully!';
+    } else {
+      return 'User not found!';
     }
   }
 }

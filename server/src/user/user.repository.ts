@@ -1,7 +1,9 @@
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PartialUserDto } from './services/dto/partialUserInput.dto';
 import { IUserEntity } from './entities/user.entity';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
@@ -25,7 +27,7 @@ export class UserRepository {
     return deletedUser;
   }
 
-  async findAllUser(): Promise<IUserEntity[]> {
+  async findAllUsers(): Promise<IUserEntity[]> {
     const allUsers = await this.prisma.user.findMany();
     return allUsers;
   }
