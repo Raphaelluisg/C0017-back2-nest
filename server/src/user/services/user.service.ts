@@ -3,7 +3,9 @@ import { IUserEntity } from '../entities/user.entity';
 import { randomUUID } from 'node:crypto';
 import { PartialUserDto } from './dto/partialUserInput.dto';
 import { UserRepository } from '../user.repository';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
+import { Exception } from 'src/utils/exceptions/exception';
 
 @Injectable()
 export class UserService {
@@ -12,7 +14,7 @@ export class UserService {
   async createUser(user: UserDto): Promise<IUserEntity> {
     const userEntity = { ...user, id: randomUUID() };
     if (user.password.length <= 8) {
-      throw new Error('Invalid password!');
+      throw new Exception(Exceptions.InvalidData, 'Invalid Password');
     }
     const createdUser = await this.userRepository.createUser(userEntity);
     return createdUser;
@@ -32,8 +34,6 @@ export class UserService {
       const existUser = this.userRepository.deleteUser(userId);
       if (existUser) {
         return true;
-      } else {
-        return false;
       }
     } catch (err) {
       console.log(err);

@@ -15,6 +15,7 @@ import { PartialUserDto } from './services/dto/partialUserInput.dto';
 import { UserDto } from './services/dto/userInput.dto';
 import { UserService } from './services/user.service';
 import { Response } from 'express';
+import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 
 @Controller('user')
 export class UserController {
@@ -30,14 +31,14 @@ export class UserController {
     try {
       return await this.service.getUserById(id);
     } catch (err) {
-      console.log(err);
+      HandleException(err);
     }
   }
 
   @Post()
   async createUser(
     @Body() { name, email, password, cpf, role }: UserDto,
-    @Res() response: Response, 
+    @Res() response: Response,
   ) {
     try {
       const result = await this.service.createUser({
@@ -49,8 +50,7 @@ export class UserController {
       });
       response.status(201).send(result);
     } catch (err) {
-      console.log(err);
-      throw new BadRequestException(err.message);
+      HandleException(err);
     }
   }
 
@@ -59,13 +59,14 @@ export class UserController {
     try {
       return await this.service.updateUser(userData);
     } catch (err) {
-      console.log(err);
+      HandleException(err);
     }
   }
 
   @Delete(':id')
-  async deleteUserById(@Param('id') id: string): Promise<string> {
-    const userIsDeleted = await this.service.deleteUserById(id);
+  async deleteUserById(@Param('id') userId: string): Promise<string> {
+    const userIsDeleted = await this.service.deleteUserById(userId);
+    console.log(userIsDeleted);
     if (userIsDeleted) {
       return 'User deleted successfully!';
     } else {
